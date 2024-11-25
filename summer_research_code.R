@@ -1,17 +1,29 @@
-# Install and load necessary packages. Note: You will need to install these libraries if they have not been installed.
-library(plm)
-library(dplyr)
-library(lmtest)
-library(car)
-library(lme4)
-library(stargazer)
-library(texreg)
-library(tseries)
-library(tidyr)
-library(knitr)
+# Function to install and load required packages
+install_and_load <- function(packages) {
+  # Loop through each package
+  for (package in packages) {
+    # Check if the package is already installed
+    if (!require(package, character.only = TRUE)) {
+      # If not installed, install it
+      install.packages(package, dependencies = TRUE)
+      # Load the package after installation
+      library(package, character.only = TRUE)
+    }
+  }
+}
 
-# Modified data
-data <- read.csv("C:/Users/seanp/Downloads/summer_research_data_complete_1.csv")
+# List of required packages
+required_packages <- c(
+  "plm", "dplyr", "lmtest", "car", 
+  "lme4", "stargazer", "texreg", 
+  "tseries", "tidyr", "knitr"
+)
+
+# Install and load the packages
+install_and_load(required_packages)
+
+# Data
+data <- read.csv("summer_research_data_complete_1.csv")
 
 # Create columns with real GDP per capita for each year
 # Create new columns for each year
@@ -1340,24 +1352,6 @@ between7 <- plm(formula = GROWTH ~ TEA + I(TEA^2) + INITIAL +
 summary(between7)
 # coeftest(between7, vcovHC(between7, type = "HC3"))
 calculate_vif(between7)
-
-
-# Conduct Granger causality test
-pgrangertest(TEA ~ GROWTH, data = panel_filtered, order = 2L)
-pgrangertest(GROWTH ~ TEA, data = panel_filtered, order = 2L)
-
-granger1 <- plm(formula = GROWTH ~ I(lag(GROWTH, 1) + lag(GROWTH, 2) + lag(GROWTH, 3)) + I(lag(TEA, 1) + lag(TEA, 2) + lag(TEA, 3)), 
-                data = panel, 
-                index = c("Country", "Year"),
-                model = "within")
-granger2 <- plm(formula = TEA ~ I(lag(GROWTH, 1) + lag(GROWTH, 2) + lag(GROWTH, 3)) + I(lag(TEA, 1) + lag(TEA, 2) + lag(TEA, 3)),
-                data = panel, 
-                index = c("Country", "Year"),
-                model = "within")
-
-summary(granger1)
-summary(granger2)
-
 
 # Fixed effects but differently
 
