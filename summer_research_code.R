@@ -9,7 +9,6 @@ library(texreg)
 library(tseries)
 library(tidyr)
 library(knitr)
-library(here)
 
 # Modified data
 data <- read.csv("C:/Users/seanp/Downloads/summer_research_data_complete_1.csv")
@@ -73,7 +72,57 @@ calculate_vif <- function(model) {
   return(vif_values)
 }
 
+# Names, descriptions, and sources of the variables
+# Define the data as a data frame
+data_sources <- data.frame(
+  `Variable Name` = c(
+    "GDP per capita growth (annual %)", 
+    "Total early-stage entrepreneurial activity", 
+    "Foreign direct investment, net inflows (% of GDP)", 
+    "GDP per capita, PPP (constant 2021 international $)*", 
+    "Research and development expenditure (% of GDP)", 
+    "Urban population (% of total population)", 
+    "Mean years of schooling (ISCED 1 or higher), population 25+ years, both sexes", 
+    "Gross capital formation (% of GDP)", 
+    "Trade (% of GDP)", 
+    "Unemployment, total (% of total labor force) (modeled ILO estimate)", 
+    "Inflation, consumer prices (annual %)", 
+    "Government expenditure (% of GDP)", 
+    "Domestic credit to private sector (% of GDP)", 
+    "Fixed broadband subscriptions (per 100 people)", 
+    "Political stability and absence of violence/terrorism: estimate"
+  ),
+  Abbreviation = c(
+    "GROWTH", "TEA", "FDI", "LOGRGDPPC", "RD", "URBAN", 
+    "EDUC", "GCF", "TRADE", "UNEMPLOYMENT", "INFLATION", 
+    "GOVT", "CREDIT", "BROADBAND", "POLSTAB"
+  ),
+  Source = c(
+    "World Bank Open Data", 
+    "Global Entrepreneurship Monitor (GEM) Project", 
+    "World Bank Open Data", 
+    "World Bank Open Data", 
+    "World Bank Open Data", 
+    "World Bank Open Data", 
+    "UNESCO Institute for Statistics", 
+    "World Bank Open Data", 
+    "World Bank Open Data", 
+    "World Bank Open Data", 
+    "World Bank Open Data", 
+    "Our World in Data, cited from International Monetary Fund (IMF)", 
+    "World Bank Open Data", 
+    "World Bank Open Data", 
+    "World Bank Open Data"
+  ),
+  stringsAsFactors = FALSE
+)
 
+# Print the table in a formatted style using kable
+kable(
+  data_sources, 
+  col.names = c("Variable Name", "Abbreviation", "Source"), 
+  caption = "Variable and Data Sources. *The natural log of this variable was used."
+)
 
 # Correlation matrix
 selected_vars <- c("GROWTH", "TEA", "FDI", "LOGRGDPPC", "INITIAL", "RD", "URBAN", 
