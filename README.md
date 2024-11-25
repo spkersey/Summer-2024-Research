@@ -1,6 +1,6 @@
 # Summer Research Data Repository
 
-This repository contains the dataset and associated code for my summer research project.
+This repository contains the dataset and associated code for my summer 2024 research project.
 
 ## How to Use
 
